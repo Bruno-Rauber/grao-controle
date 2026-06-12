@@ -1,4 +1,4 @@
-const CACHE = 'graocontrole-v5';
+const CACHE = 'graocontrole-v6';
 
 const JS_CSS = [
   '/css/estilo.css',
