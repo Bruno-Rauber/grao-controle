@@ -1,0 +1,8 @@
+{
+  "name": "grao-controle",
+  "version": "1.0.0",
+  "description": "PWA para classificador de grãos",
+  "scripts": {
+    "dev": "npx serve . -l 3000"
+  }
+}

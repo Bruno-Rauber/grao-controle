@@ -1,0 +1,567 @@
+/* ── Reset & base ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --verde:       #4a7c59;
+  --verde-claro: #d6ead9;
+  --verde-hover: #3a6147;
+  --fundo:       #f0f7ee;
+  --superficie:  #ffffff;
+  --texto:       #1e2d25;
+  --texto-2:     #5a6e60;
+  --borda:       #cde0d0;
+  --sombra:      0 2px 8px rgba(74, 124, 89, 0.12);
+  --radius:      12px;
+  --nav-h:       64px;
+}
+
+html, body {
+  height: 100%;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ── Layout principal ─────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+header {
+  background: var(--verde);
+  color: #fff;
+  padding: 14px 16px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  padding-bottom: calc(var(--nav-h) + 16px);
+}
+
+/* ── Seções ──────────────────────────────────────────── */
+.secao { display: none; }
+.secao.ativa { display: block; }
+
+/* ── Cards ───────────────────────────────────────────── */
+.card {
+  background: var(--superficie);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.card h2 {
+  font-size: 1rem;
+  color: var(--verde);
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--borda);
+  padding-bottom: 8px;
+}
+
+.card p {
+  margin: 6px 0;
+  color: var(--texto-2);
+}
+
+.card p strong { color: var(--texto); }
+
+/* ── Botões ──────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primario {
+  background: var(--verde);
+  color: #fff;
+}
+
+.btn-primario:hover { background: var(--verde-hover); }
+
+.btn-secundario {
+  background: var(--verde-claro);
+  color: var(--verde);
+}
+
+/* ── Navegação (rodapé) ───────────────────────────────── */
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-h);
+  background: var(--superficie);
+  border-top: 1px solid var(--borda);
+  display: flex;
+  box-shadow: 0 -2px 8px rgba(74,124,89,0.10);
+  z-index: 20;
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--texto-2);
+  font-size: 0.7rem;
+  font-weight: 500;
+  min-height: 44px;
+  padding: 0;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-btn .icone {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.nav-btn.ativo {
+  color: var(--verde);
+}
+
+.nav-btn.ativo .icone-wrap {
+  background: var(--verde-claro);
+  border-radius: 16px;
+  padding: 2px 14px;
+}
+
+/* ── Placeholder de seções vazias ────────────────────── */
+.placeholder {
+  text-align: center;
+  color: var(--texto-2);
+  margin-top: 60px;
+}
+
+.placeholder .icone-grande { font-size: 3rem; }
+.placeholder p { margin-top: 8px; }
+
+/* ── Utilitários ─────────────────────────────────────── */
+.oculto   { display: none !important; }
+.texto-2  { color: var(--texto-2); font-size: 0.875rem; }
+
+/* ── Input / Select / Textarea ───────────────────────── */
+.input {
+  display: block;
+  width: 100%;
+  padding: 11px 12px;
+  border: 1.5px solid var(--borda);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: var(--superficie);
+  color: var(--texto);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgba(74,124,89,0.15);
+}
+textarea.input { resize: vertical; }
+
+/* ── Campo (label + input) ───────────────────────────── */
+.campo { margin-bottom: 14px; }
+.campo label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--texto-2);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ── Barra de topo (busca + botão) ───────────────────── */
+.barra-topo {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.input-busca { flex: 1; min-width: 0; }
+
+/* ── Botão full width ────────────────────────────────── */
+.btn-full { width: 100%; margin-top: 4px; }
+
+/* ── Botão voltar ────────────────────────────────────── */
+.btn-voltar { margin-bottom: 12px; }
+
+/* ── Botão ícone ─────────────────────────────────────── */
+.btn-icone {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.btn-icone:active { background: var(--verde-claro); }
+
+/* ── List item ───────────────────────────────────────── */
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--borda);
+}
+.list-item:last-child { border-bottom: none; }
+
+.list-item-clicavel { cursor: pointer; }
+.list-item-clicavel:active { background: var(--verde-claro); }
+
+.list-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.list-item-info strong { font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.list-item-info span   { font-size: 0.82rem; color: var(--texto-2); }
+.list-item-info .obs   { font-style: italic; }
+
+.list-item-acoes { display: flex; gap: 0; flex-shrink: 0; }
+
+/* ── Estado vazio ────────────────────────────────────── */
+.vazio {
+  text-align: center;
+  color: var(--texto-2);
+  padding: 28px 0;
+  font-size: 0.9rem;
+}
+
+/* ── Saldo por grão ──────────────────────────────────── */
+.saldo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--borda);
+}
+.saldo-item:last-child { border-bottom: none; }
+.saldo-nome  { font-weight: 600; }
+.saldo-valor { font-size: 1.05rem; font-weight: 700; color: var(--verde); }
+.saldo-negativo { color: #c0392b; }
+
+/* ── Badge de status de venda ────────────────────────── */
+.badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.badge-pago    { background: #d6ead9; color: #2e7d32; }
+.badge-fiado   { background: #fde8c8; color: #b45309; }
+.badge-parcial { background: #e3eaf8; color: #1e4da0; }
+
+/* ── Modal ───────────────────────────────────────────── */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-box {
+  background: var(--superficie);
+  width: 100%;
+  max-width: 480px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+  max-height: 90dvh;
+  overflow-y: auto;
+}
+.modal-box h3 {
+  font-size: 1.1rem;
+  color: var(--verde);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--borda);
+}
+.form-acoes       { display: flex; gap: 8px; margin-top: 8px; }
+.form-acoes .btn  { flex: 1; }
+
+/* ── Detalhe de cliente ──────────────────────────────── */
+.detalhe-header h2 { color: var(--texto); margin-bottom: 4px; }
+
+/* ── Card com alerta (saldo devedor) ─────────────────── */
+.card-alerta { border-left: 4px solid #e67e22; }
+
+/* ── Toast ───────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  padding: 10px 22px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  max-width: calc(100% - 32px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.toast.toast-visivel  { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.toast-sucesso  { background: var(--verde); }
+.toast.toast-erro     { background: #c0392b; }
+
+/* ── Dashboard ───────────────────────────────────────── */
+.btn-nova-dash {
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+  padding: 14px;
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.dash-card {
+  background: var(--superficie);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dash-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-2);
+}
+
+.dash-valor {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--verde);
+}
+
+/* ── Filtros da lista de vendas ──────────────────────── */
+.filtros-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.input-filtro {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 8px;
+  font-size: 0.85rem;
+}
+
+/* ── Card de venda na lista ──────────────────────────── */
+.venda-card {
+  background: var(--superficie);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.venda-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.venda-cliente {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.venda-detalhes {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--texto-2);
+  margin-bottom: 8px;
+}
+
+.venda-rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--borda);
+  padding-top: 8px;
+}
+
+.venda-total {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+.venda-saldo-dev {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #c0392b;
+}
+
+.btn-pagar {
+  font-size: 0.82rem;
+  padding: 0 12px;
+  min-height: 36px;
+  height: 36px;
+}
+
+/* ── Toggle de status (Pago / Fiado) ─────────────────── */
+.toggle-group {
+  display: flex;
+  gap: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid var(--borda);
+}
+
+.toggle-btn {
+  flex: 1;
+  min-height: 44px;
+  border: none;
+  background: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--texto-2);
+  transition: background 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.toggle-btn + .toggle-btn { border-left: 1.5px solid var(--borda); }
+
+.toggle-btn.toggle-ativo {
+  background: var(--verde);
+  color: #fff;
+}
+
+/* ── Total em tempo real ─────────────────────────────── */
+.total-display {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--verde);
+  padding: 8px 0 4px;
+}
+
+/* ── Aviso de estoque insuficiente ───────────────────── */
+.aviso {
+  font-size: 0.82rem;
+  color: #b45309;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+/* ── Info no modal de pagamento ──────────────────────── */
+.modal-sub {
+  font-size: 0.9rem;
+  color: var(--texto-2);
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--borda);
+}
+
+/* ── Banner de lembrete de backup ───────────────────── */
+.banner-aviso {
+  background: #fde8c8;
+  color: #92400e;
+  border-bottom: 1px solid #f59e0b;
+  padding: 10px 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+.banner-aviso:active { background: #fcd7a0; }
+
+/* ── Ajustes: grade de informações ──────────────────── */
+.ajustes-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+}
+.ajustes-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--borda);
+}
+.ajustes-info-item:nth-last-child(-n+2) { border-bottom: none; }
+.ajustes-info-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-2);
+}
+.ajustes-info-valor {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--verde);
+}
+
+/* ── Responsive: nunca maior que 480px centrado ──────── */
+@media (min-width: 480px) {
+  #app { max-width: 480px; margin: 0 auto; }
+  nav  { max-width: 480px; left: 50%; transform: translateX(-50%); }
+}

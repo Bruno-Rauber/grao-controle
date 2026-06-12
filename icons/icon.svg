@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="96" fill="#4a7c59"/>
+
+  <!-- Stem -->
+  <line x1="256" y1="410" x2="256" y2="190" stroke="#d6ead9" stroke-width="22" stroke-linecap="round"/>
+
+  <!-- Awns (whiskers at top) -->
+  <line x1="256" y1="150" x2="216" y2="96"  stroke="#d6ead9" stroke-width="14" stroke-linecap="round"/>
+  <line x1="256" y1="146" x2="256" y2="84"  stroke="#d6ead9" stroke-width="14" stroke-linecap="round"/>
+  <line x1="256" y1="150" x2="296" y2="96"  stroke="#d6ead9" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Top grain -->
+  <ellipse cx="256" cy="178" rx="24" ry="38" fill="#d6ead9"/>
+
+  <!-- Left grains -->
+  <ellipse cx="212" cy="218" rx="22" ry="36" fill="#d6ead9" transform="rotate(-28 212 218)"/>
+  <ellipse cx="200" cy="278" rx="22" ry="36" fill="#d6ead9" transform="rotate(-28 200 278)"/>
+  <ellipse cx="198" cy="338" rx="22" ry="36" fill="#d6ead9" transform="rotate(-28 198 338)"/>
+
+  <!-- Right grains -->
+  <ellipse cx="300" cy="218" rx="22" ry="36" fill="#d6ead9" transform="rotate(28 300 218)"/>
+  <ellipse cx="312" cy="278" rx="22" ry="36" fill="#d6ead9" transform="rotate(28 312 278)"/>
+  <ellipse cx="314" cy="338" rx="22" ry="36" fill="#d6ead9" transform="rotate(28 314 338)"/>
+</svg>

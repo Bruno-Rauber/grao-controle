@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#4a7c59" />
+  <meta name="description" content="Controle de vendas e estoque de grãos" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="GrãoControle" />
+  <title>GrãoControle</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/icon.svg" />
+  <link rel="stylesheet" href="/css/estilo.css" />
+</head>
+<body>
+  <div id="app">
+    <header>🌾 GrãoControle</header>
+
+    <div id="banner-backup" class="banner-aviso oculto"></div>
+
+    <main>
+      <!-- ── Início ───────────────────────────────── -->
+      <section id="sec-inicio" class="secao">
+        <div id="inicio-content">
+          <div class="card">
+            <h2>Carregando…</h2>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Vendas ───────────────────────────────── -->
+      <section id="sec-vendas" class="secao">
+
+        <!-- Vista: lista -->
+        <div id="vendas-lista-view">
+          <div class="filtros-bar">
+            <select id="filtro-status" class="input input-filtro">
+              <option value="">Todos</option>
+              <option value="pago">Pago</option>
+              <option value="fiado">Fiado</option>
+              <option value="parcial">Parcial</option>
+            </select>
+            <select id="filtro-grao" class="input input-filtro">
+              <option value="">Todos grãos</option>
+            </select>
+            <button class="btn btn-primario" id="btn-nova-venda">+ Nova</button>
+          </div>
+          <div id="vendas-lista"></div>
+        </div>
+
+        <!-- Vista: formulário -->
+        <div id="vendas-form-view" class="oculto">
+          <button class="btn btn-secundario btn-voltar" id="btn-voltar-vendas">← Lista</button>
+          <div class="card">
+            <h2>Nova Venda</h2>
+            <form id="form-venda" novalidate>
+              <div class="campo">
+                <label for="venda-cliente">Cliente *</label>
+                <select id="venda-cliente" class="input" required></select>
+              </div>
+              <div class="campo">
+                <label for="venda-grao">Grão *</label>
+                <select id="venda-grao" class="input" required></select>
+              </div>
+              <div class="campo">
+                <label for="venda-peso">Peso (kg) *</label>
+                <input id="venda-peso" type="text" inputmode="decimal"
+                       placeholder="0,00" class="input" required />
+                <p id="aviso-estoque" class="aviso oculto">⚠️ Peso maior que o saldo em estoque</p>
+              </div>
+              <div class="campo">
+                <label for="venda-preco">Preço por kg *</label>
+                <input id="venda-preco" type="text" inputmode="decimal"
+                       placeholder="0,00" class="input" required />
+              </div>
+              <div class="campo">
+                <label>Total</label>
+                <div id="venda-total-display" class="total-display">R$ 0,00</div>
+              </div>
+              <div class="campo">
+                <label for="venda-data">Data</label>
+                <input id="venda-data" type="date" class="input" />
+              </div>
+              <div class="campo">
+                <label>Status</label>
+                <div class="toggle-group" id="toggle-status">
+                  <button type="button" class="toggle-btn toggle-ativo" data-valor="pago">✓ Pago</button>
+                  <button type="button" class="toggle-btn" data-valor="fiado">Fiado</button>
+                </div>
+              </div>
+              <div class="campo">
+                <label for="venda-obs">Observação</label>
+                <input id="venda-obs" type="text" class="input" placeholder="Opcional" />
+              </div>
+              <button type="submit" class="btn btn-primario btn-full">Salvar Venda</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Modal: registrar pagamento -->
+        <div id="modal-pagamento" class="modal oculto" role="dialog" aria-modal="true">
+          <div class="modal-box">
+            <h3>Registrar Pagamento</h3>
+            <div id="modal-pagamento-info"></div>
+            <form id="form-pagamento" novalidate>
+              <input type="hidden" id="pagamento-venda-id" />
+              <div class="campo">
+                <label for="pagamento-valor">Valor *</label>
+                <input id="pagamento-valor" type="text" inputmode="decimal"
+                       placeholder="0,00" class="input" required />
+              </div>
+              <div class="campo">
+                <label for="pagamento-data">Data</label>
+                <input id="pagamento-data" type="date" class="input" />
+              </div>
+              <div class="campo">
+                <label for="pagamento-obs">Observação</label>
+                <input id="pagamento-obs" type="text" class="input" placeholder="Opcional" />
+              </div>
+              <div class="form-acoes">
+                <button type="button" class="btn btn-secundario" id="btn-cancelar-pagamento">Cancelar</button>
+                <button type="submit" class="btn btn-primario">Confirmar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── Estoque ──────────────────────────────── -->
+      <section id="sec-estoque" class="secao">
+        <div id="estoque-saldo"></div>
+
+        <div class="card">
+          <h2>Nova entrada de amostra</h2>
+          <form id="form-entrada" novalidate>
+            <div class="campo">
+              <label for="entrada-grao">Grão</label>
+              <select id="entrada-grao" class="input"></select>
+            </div>
+            <div class="campo">
+              <label for="entrada-peso">Peso (kg) *</label>
+              <input id="entrada-peso" type="text" inputmode="decimal"
+                     placeholder="0,00" class="input" required />
+            </div>
+            <div class="campo">
+              <label for="entrada-data">Data</label>
+              <input id="entrada-data" type="date" class="input" />
+            </div>
+            <div class="campo">
+              <label for="entrada-obs">Observação</label>
+              <input id="entrada-obs" type="text" class="input" placeholder="Opcional" />
+            </div>
+            <button type="submit" class="btn btn-primario btn-full">Registrar Entrada</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Histórico de entradas</h2>
+          <div id="estoque-historico"></div>
+        </div>
+      </section>
+
+      <!-- ── Clientes ─────────────────────────────── -->
+      <section id="sec-clientes" class="secao">
+
+        <!-- Vista: lista -->
+        <div id="clientes-lista-view">
+          <div class="barra-topo">
+            <input type="search" id="busca-cliente" class="input input-busca"
+                   placeholder="Buscar por nome…" />
+            <button class="btn btn-primario" id="btn-novo-cliente">+ Novo</button>
+          </div>
+          <div id="clientes-lista"></div>
+        </div>
+
+        <!-- Vista: detalhe -->
+        <div id="clientes-detalhe-view" class="oculto">
+          <button class="btn btn-secundario btn-voltar" id="btn-voltar-clientes">← Voltar</button>
+          <div id="clientes-detalhe-content"></div>
+        </div>
+
+        <!-- Modal: criar / editar -->
+        <div id="modal-cliente" class="modal oculto" role="dialog" aria-modal="true">
+          <div class="modal-box">
+            <h3 id="modal-cliente-titulo">Novo Cliente</h3>
+            <form id="form-cliente" novalidate>
+              <div class="campo">
+                <label for="cliente-nome">Nome *</label>
+                <input id="cliente-nome" type="text" class="input" required autocomplete="name" />
+              </div>
+              <div class="campo">
+                <label for="cliente-telefone">Telefone</label>
+                <input id="cliente-telefone" type="tel" class="input"
+                       inputmode="tel" autocomplete="tel" />
+              </div>
+              <div class="campo">
+                <label for="cliente-obs">Observação</label>
+                <textarea id="cliente-obs" class="input" rows="2"></textarea>
+              </div>
+              <div class="form-acoes">
+                <button type="button" class="btn btn-secundario" id="btn-cancelar-cliente">Cancelar</button>
+                <button type="submit" class="btn btn-primario">Salvar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── Ajustes ──────────────────────────────── -->
+      <section id="sec-ajustes" class="secao">
+
+        <div class="card">
+          <h2>Informações</h2>
+          <div class="ajustes-info-grid">
+            <div class="ajustes-info-item">
+              <span class="ajustes-info-label">Último backup</span>
+              <span class="ajustes-info-valor" id="ajustes-ultimo-backup">—</span>
+            </div>
+            <div class="ajustes-info-item">
+              <span class="ajustes-info-label">Vendas</span>
+              <span class="ajustes-info-valor" id="ajustes-total-vendas">—</span>
+            </div>
+            <div class="ajustes-info-item">
+              <span class="ajustes-info-label">Clientes</span>
+              <span class="ajustes-info-valor" id="ajustes-total-clientes">—</span>
+            </div>
+            <div class="ajustes-info-item">
+              <span class="ajustes-info-label">Entradas</span>
+              <span class="ajustes-info-valor" id="ajustes-total-entradas">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Backup e Restauração</h2>
+          <p class="texto-2" style="margin-bottom:14px">
+            Os dados ficam só neste dispositivo. Faça backup com regularidade!
+          </p>
+          <button class="btn btn-primario btn-full" id="btn-fazer-backup">⬇️ Fazer Backup</button>
+          <div style="margin-top:10px">
+            <button class="btn btn-secundario btn-full" id="btn-restaurar-backup">📂 Restaurar Backup</button>
+            <input type="file" id="input-restaurar" accept=".json" class="oculto" />
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Exportar Vendas em CSV</h2>
+          <div class="campo">
+            <label for="csv-de">De</label>
+            <input id="csv-de" type="date" class="input" />
+          </div>
+          <div class="campo">
+            <label for="csv-ate">Até</label>
+            <input id="csv-ate" type="date" class="input" />
+          </div>
+          <button class="btn btn-primario btn-full" id="btn-exportar-csv">📊 Exportar CSV</button>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- ── Navegação fixa ────────────────────────── -->
+    <nav>
+      <button class="nav-btn" data-aba="inicio">
+        <span class="icone-wrap"><span class="icone">🏠</span></span>
+        <span>Início</span>
+      </button>
+      <button class="nav-btn" data-aba="vendas">
+        <span class="icone-wrap"><span class="icone">🛒</span></span>
+        <span>Vendas</span>
+      </button>
+      <button class="nav-btn" data-aba="estoque">
+        <span class="icone-wrap"><span class="icone">📦</span></span>
+        <span>Estoque</span>
+      </button>
+      <button class="nav-btn" data-aba="clientes">
+        <span class="icone-wrap"><span class="icone">👤</span></span>
+        <span>Clientes</span>
+      </button>
+      <button class="nav-btn" data-aba="ajustes">
+        <span class="icone-wrap"><span class="icone">⚙️</span></span>
+        <span>Ajustes</span>
+      </button>
+    </nav>
+  </div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
