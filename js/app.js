@@ -131,6 +131,27 @@ async function carregarInicio() {
   });
 }
 
+// ── PWA install prompt ────────────────────────────────────────────────────────
+let deferredInstall = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstall = e;
+  document.getElementById('card-instalar').classList.remove('oculto');
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredInstall = null;
+  document.getElementById('card-instalar').classList.add('oculto');
+});
+
+document.getElementById('btn-instalar').addEventListener('click', async () => {
+  if (!deferredInstall) return;
+  deferredInstall.prompt();
+  const { outcome } = await deferredInstall.userChoice;
+  if (outcome === 'accepted') deferredInstall = null;
+});
+
 // ── Bootstrap ─────────────────────────────────────────────────────────────────
 async function init() {
   await db.open();

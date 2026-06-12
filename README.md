@@ -31,14 +31,16 @@ Ou arraste a pasta para o dashboard da Vercel em [vercel.com/new](https://vercel
 
 ## Instalar na tela inicial
 
-### Android (Chrome)
+### Android (Chrome) — método mais fácil
 1. Abra o app no Chrome
-2. Toque nos três pontos (⋮) no canto superior direito
-3. Selecione **"Adicionar à tela inicial"** ou **"Instalar app"**
-4. Confirme — o ícone aparece na tela inicial como um app nativo
+2. Vá na aba **Ajustes** dentro do app
+3. Toque em **"📲 Instalar na tela inicial"** (aparece automaticamente quando disponível)
+4. Confirme no diálogo do Chrome — o ícone aparece na tela inicial
+
+> Se o botão não aparecer: toque no menu ⋮ do Chrome → **"Instalar app"** ou **"Adicionar à tela inicial"**.
 
 ### iPhone (Safari)
-1. Abra o app no **Safari** (não funciona em outros navegadores no iOS)
+1. Abra o app no **Safari** (outros navegadores não suportam instalação no iOS)
 2. Toque no botão de compartilhar (□↑) na barra inferior
 3. Selecione **"Adicionar à Tela de Início"**
 4. Confirme o nome e toque em **Adicionar**

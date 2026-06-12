@@ -81,16 +81,20 @@ async function fazerBackup() {
     const hoje = hojeISO();
     const nomeArquivo = `graocontrole-backup-${hoje}.json`;
 
+    let compartilhou = false;
     if (navigator.canShare) {
       const file = new File([blob], nomeArquivo, { type: 'application/json' });
       if (navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'GrãoControle Backup' });
-      } else {
-        baixarArquivo(blob, nomeArquivo);
+        try {
+          await navigator.share({ files: [file], title: 'GrãoControle Backup' });
+          compartilhou = true;
+        } catch (shareErr) {
+          if (shareErr?.name === 'AbortError') return; // usuário cancelou o share
+          // Qualquer outro erro (NotAllowedError, etc.): cai no download normal
+        }
       }
-    } else {
-      baixarArquivo(blob, nomeArquivo);
     }
+    if (!compartilhou) baixarArquivo(blob, nomeArquivo);
 
     await db.config.put({ chave: 'ultimoBackup', valor: hoje });
 
@@ -98,7 +102,8 @@ async function fazerBackup() {
     document.getElementById('banner-backup').classList.add('oculto');
     toast('Backup realizado com sucesso!', 'sucesso');
   } catch (err) {
-    if (err?.name !== 'AbortError') toast('Erro ao fazer backup', 'erro');
+    toast('Erro ao fazer backup', 'erro');
+    console.error(err);
   }
 }
 
