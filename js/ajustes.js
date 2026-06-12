@@ -1,5 +1,5 @@
 import db from './db.js';
-import { data as fmtData, hojeISO } from './util.js';
+import { data as fmtData, hojeISO, dinheiro, peso as fmtPeso } from './util.js';
 import { toast } from './toast.js';
 
 // ── Lembrete de backup ─────────────────────────────────────────────────────────
@@ -57,6 +57,78 @@ export async function renderAjustes() {
     d.setDate(d.getDate() - 30);
     de.value = d.toISOString().slice(0, 10);
   }
+
+  renderHistoricoMensal();
+}
+
+// ── Histórico mensal ───────────────────────────────────────────────────────────
+const MESES_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function labelMes(mesStr) {
+  const [y, m] = mesStr.split('-');
+  return `${MESES_PT[parseInt(m, 10) - 1]}/${y}`;
+}
+
+function ultimos12Meses() {
+  const resultado = [];
+  const hoje = new Date();
+  for (let i = 0; i < 12; i++) {
+    const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+    resultado.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
+  }
+  return resultado;
+}
+
+async function renderHistoricoMensal() {
+  const container = document.getElementById('historico-mensal');
+  if (!container) return;
+
+  const [graos, vendas, pagamentos] = await Promise.all([
+    db.graos.toArray(),
+    db.vendas.toArray(),
+    db.pagamentos.toArray(),
+  ]);
+
+  const graoMap = Object.fromEntries(graos.map(g => [g.id, g.nome]));
+  const meses   = ultimos12Meses();
+  const linhas  = [];
+
+  for (const mes of meses) {
+    const pagsDoMes   = pagamentos.filter(p => p.data?.startsWith(mes));
+    const vendasDoMes = vendas.filter(v => v.data?.startsWith(mes));
+    if (!pagsDoMes.length && !vendasDoMes.length) continue;
+
+    const arrecadado = pagsDoMes.reduce((s, p) => s + (p.valor || 0), 0);
+    const vendido    = vendasDoMes.reduce((s, v) => s + (v.total || 0), 0);
+
+    const kgPorGrao = {};
+    for (const v of vendasDoMes) {
+      kgPorGrao[v.graoId] = (kgPorGrao[v.graoId] || 0) + (v.pesoKg || 0);
+    }
+    const kgTexto = Object.entries(kgPorGrao)
+      .map(([id, kg]) => `${graoMap[Number(id)] || '?'}: ${fmtPeso(kg)}`)
+      .join(' · ');
+
+    linhas.push({ mes, arrecadado, vendido, kgTexto });
+  }
+
+  if (!linhas.length) {
+    container.innerHTML = '<p class="vazio">Sem movimentação nos últimos 12 meses</p>';
+    return;
+  }
+
+  container.innerHTML = linhas.map(l => `
+    <div class="list-item">
+      <div class="list-item-info">
+        <strong>${labelMes(l.mes)}</strong>
+        ${l.kgTexto ? `<span>${l.kgTexto}</span>` : ''}
+      </div>
+      <div style="text-align:right;flex-shrink:0;line-height:1.5">
+        <div style="font-size:0.82rem;color:var(--texto-2)">Vendido: ${dinheiro(l.vendido)}</div>
+        <div style="font-weight:700;color:var(--verde)">Recebido: ${dinheiro(l.arrecadado)}</div>
+      </div>
+    </div>
+  `).join('');
 }
 
 // ── Fazer Backup ───────────────────────────────────────────────────────────────

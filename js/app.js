@@ -57,8 +57,9 @@ async function carregarInicio() {
     };
   }));
 
-  // Arrecadado no mês corrente
+  // Arrecadado no mês corrente e total geral
   const todosPagamentos = await db.pagamentos.toArray();
+  const arrecadadoTotal = todosPagamentos.reduce((s, p) => s + (p.valor || 0), 0);
   const arrecadadoMes = todosPagamentos
     .filter(p => p.data?.startsWith(mesAtual))
     .reduce((s, p) => s + (p.valor || 0), 0);
@@ -93,6 +94,10 @@ async function carregarInicio() {
     </button>
 
     <div class="dash-grid">
+      <div class="dash-card">
+        <span class="dash-label">Total arrecadado</span>
+        <span class="dash-valor">${dinheiro(arrecadadoTotal)}</span>
+      </div>
       <div class="dash-card">
         <span class="dash-label">Arrecadado no mês</span>
         <span class="dash-valor">${dinheiro(arrecadadoMes)}</span>
